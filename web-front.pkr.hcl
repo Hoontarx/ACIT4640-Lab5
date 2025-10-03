@@ -55,7 +55,7 @@ build {
   provisioner "file" {
     # COMPLETE ME add the nginx.conf file to your image
     source = "files/nginx.conf"
-    destination = "/etc/nginx/nginx.conf"
+    destination = "/temp/web/nginx.conf"
   }
 
   # COMPLETE ME add additional provisioners to run shell scripts and co
