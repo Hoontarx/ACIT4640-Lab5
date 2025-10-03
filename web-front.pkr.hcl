@@ -40,6 +40,7 @@ build {
       # See nginx.conf file for root directory where files will be served.
       # Files need appropriate ownership for default user
       "sudo mkdir -p /web/html",
+      "sudo mkdir -p /tmp/web",
       "sudo chown -R www-data:www-data /web/html",
       "sudo chmod -R 755 /web/html"
     ]
