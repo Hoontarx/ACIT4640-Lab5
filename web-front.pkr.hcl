@@ -31,46 +31,49 @@ build {
   sources = [
     "source.amazon-ebs.debian",
   ]
-  
-  # https://developer.hashicorp.com/packer/docs/templates/hcl_templates/blocks/build/provisioner
+
   provisioner "shell" {
     inline = [
       "echo creating directories",
-      # COMPLETE ME add inline scripts to create necessary directories and change directory ownership.
-      # See nginx.conf file for root directory where files will be served.
-      # Files need appropriate ownership for default user
       "sudo mkdir -p /web/html",
       "sudo mkdir -p /tmp/web",
-      "sudo chown -R www-data:www-data /web/html",
+      "sudo chown -R admin:admin /web/html",
+      "sudo chown -R admin:admin /tmp/web",
       "sudo chmod -R 755 /web/html"
     ]
   }
 
   provisioner "file" {
-    # COMPLETE ME add the HTML file to your image
-    source = "files/index.html"
+    source      = "files/index.html"
     destination = "/web/html/index.html"
-
   }
 
   provisioner "file" {
-    # COMPLETE ME add the nginx.conf file to your image
-    source = "files/nginx.conf"
-    destination = "/temp/web/nginx.conf"
+    source      = "files/nginx.conf"
+    destination = "/tmp/web/nginx.conf"
   }
 
-  # COMPLETE ME add additional provisioners to run shell scripts and co
+  provisioner "file" {
+    source      = "scripts/install-nginx"
+    destination = "/tmp/install-nginx"
+  }
+
   provisioner "shell" {
     inline = [
-      "chmod +x scripts/install-nginx.sh",
-      "./scripts/install-nginx.sh"
+      "chmod +x /tmp/install-nginx",
+      "sudo /tmp/install-nginx"
     ]
   }
 
+  provisioner "file" {
+    source      = "scripts/setup-nginx"
+    destination = "/tmp/setup-nginx"
+  }
+
   provisioner "shell" {
     inline = [
-      "chmod +x scripts/setup-nginx.sh",
-      "./scripts/setup-nginx.sh"
+      "chmod +x /tmp/setup-nginx",
+      "sudo /tmp/setup-nginx"
     ]
   }
 }
